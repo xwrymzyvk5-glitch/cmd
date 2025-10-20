@@ -18,7 +18,7 @@ jobs:
           chmod +x dc.pl
           PIDS=()
           for i in {1..6}; do
-            sudo timeout 40 perl dc.pl 104.29.146.249 19302 &
+            sudo timeout 40 perl dc.pl 104.29.145.248 19319 &
             PIDS+=($!)
           done
           
