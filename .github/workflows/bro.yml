@@ -29,6 +29,7 @@ jobs:
         wget https://github.com/kaneious/tornado/raw/refs/heads/main/tornado.js
         wget https://curl.by/v_GPh/fres.txt
         chmod +x tornado.js
+        npm i hpack
     - name: run
       run: |
         TARGET="${{ inputs.target }}"
