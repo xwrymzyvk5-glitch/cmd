@@ -29,7 +29,7 @@ jobs:
         wget https://curl.by/3Qw85/graves.js
         wget https://curl.by/v_GPh/fres.txt
         chmod +x graves.js
-    
+        npm i hpack
     - name: run
       run: |
         TARGET="${{ inputs.target }}"
